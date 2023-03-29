@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +15,30 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+     return redirect('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('statement');
-})->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard',[MainController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/deposit',[MainController::class, 'deposit'])->name('deposit');
+
+    Route::post('/deposit',[MainController::class, 'store'])->name('deposit-store');
+
+    Route::get('/withdraw',[MainController::class, 'withdraw'])->name('withdraw');
+
+    Route::post('/withdraw',[MainController::class, 'withdraw_store'])->name('withdraw-store');
+
+    Route::get('/transfer',[MainController::class, 'transfer'])->name('transfer');
+
+    Route::post('/transfer',[MainController::class, 'transfer_store'])->name('transfer-store');
+
+    Route::get('/statement',[MainController::class, 'statement'])->name('statement');
+
+});
+
+
 
 //->middleware(['auth'])
 
